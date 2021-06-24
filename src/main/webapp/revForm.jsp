@@ -1,3 +1,4 @@
+<%@page import="com.reservation.domain.JoaUser"%>
 <%@page import="com.reservation.domain.JoaCalendar"%>
 <%@page import="com.reservation.domain.JoaItem"%>
 <%@page import="java.util.List"%>
@@ -11,6 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="./style.css">
 <script
   src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script
@@ -28,6 +30,7 @@
   })
   })
 </script>
+  <%@ include file="./menu.jsp"%>
   <%
   String resv_date = request.getParameter("resv_date");
   String room = request.getParameter("room");
@@ -35,20 +38,21 @@
   LocalDate resvMonth = LocalDate.parse(resv_date);
   JoaCalendar cal = js.getCalendar(resvMonth.getYear(), resvMonth.getMonthValue());
   boolean[] dailyBooked = js.dailyBooked(cal, resv_date);
+  JoaUser user = js.getUser(loginID);
   session.setAttribute("resv_date", resv_date);
   session.setAttribute("room", room);
   session.setAttribute("cal", cal);
+  session.setAttribute("user", user);
   session.setAttribute("dailyBooked", dailyBooked);
   session.setAttribute("roomName", JoaItem.ROOMNAME);
   %>
-  <%@ include file="./menu.jsp"%>
   <div class="container">
     <div class="row">
       <div class="col-md-9">
         <form action="./reserve.jsp" method="post">
           <div class="form-group">
             <label for="name">이름</label> <input type="text" name="name"
-              id="name" class="form-control">
+              id="name" class="form-control" value="<%=user.getName()%>">
           </div>
           <div class="form-group">
             <label for="resv_date">예약일</label> 
@@ -94,7 +98,7 @@
           </div>
           <div class="form-group">
             <label for="name">연락처</label> <input type="tel" name="tel"
-              id="tel" class="form-control">
+              id="tel" class="form-control" value="<%=user.getTel()%>">
           </div>
           <div class="form-group">
             <label for="name">입금자명</label> <input type="text"

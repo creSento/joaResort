@@ -9,8 +9,11 @@ import com.reservation.dao.JoaDao;
 import com.reservation.dao.JoaDaoImpl;
 import com.reservation.domain.JoaCalendar;
 import com.reservation.domain.JoaItem;
+import com.reservation.domain.JoaUser;
 
 public class JoaServiceImpl implements JoaService {
+
+    JoaDao dao = JoaDaoImpl.getInstance();
 
     private static JoaServiceImpl instance;
 
@@ -24,12 +27,25 @@ public class JoaServiceImpl implements JoaService {
     private JoaServiceImpl() {
     }
 
-    JoaDao dao = JoaDaoImpl.getInstance();
-
     @Override
     public void init() {
         dao.createResvTable();
         dao.insertInitData();
+    }
+
+    @Override
+    public int login(String id, String pwd) {
+        return dao.login(id, pwd);
+    }
+    
+    @Override
+    public int join(JoaUser user) {
+        return dao.join(user);
+    }
+    
+    @Override
+    public JoaUser getUser(String id) {
+        return dao.getUser(id);
     }
 
     @Override
@@ -68,12 +84,26 @@ public class JoaServiceImpl implements JoaService {
             dayOfweek[i] = oneDay.getDayOfWeek().toString();
             dateString[i] = oneDay.toString();
             for (JoaItem joa : monthly) {
-                if (joa.getResv_date().equals(dateString[i])) {
+                if (joa.getResv_date().equals(dateString[i]) && joa.getProcessing() != 4) {
                     isBooked[i][joa.getRoom()] = true;
                 }
             }
         }
-        return new JoaCalendar(endOfMonth, dayOfweek, dateString, isBooked, monthly);
+        return new JoaCalendar(year, month, endOfMonth, dayOfweek, dateString, isBooked, monthly);
+    }
+    
+    @Override
+    public JoaCalendar getCalendar(String year, String month) {
+        int calYear = 0;
+        int calMonth = 0;
+        if ( year == null || month == null) {
+            calYear = LocalDate.now().getYear();
+            calMonth = LocalDate.now().getMonthValue();
+        } else {
+          calYear = Integer.parseInt(year);
+          calMonth = Integer.parseInt(month);
+        }
+        return getCalendar(calYear, calMonth);
     }
 
     public boolean[] dailyBooked(JoaCalendar cal, String dateString) {
@@ -93,6 +123,26 @@ public class JoaServiceImpl implements JoaService {
     @Override
     public int addReservation(JoaItem newResv) {
         return dao.addReservation(newResv);
+    }
+
+    @Override
+    public int updateReservation(JoaItem updateResv) {
+        return dao.updateReservation(updateResv);
+    }
+    
+    @Override
+    public int cancleReservation(JoaItem resv) {
+        return dao.cancleReservation(resv);
+    }
+    
+    @Override
+    public int refundReservation(JoaItem resv) {
+        return dao.refundReservation(resv);
+    }
+
+    @Override
+    public List<JoaItem> getMyList(String id) {
+        return dao.getMyList(id);
     }
 
 }

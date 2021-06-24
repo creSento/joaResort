@@ -24,58 +24,64 @@
     <div class="row">
       <div class="col-md-9">
         <%
-        String name = request.getParameter("name");
         String resv_date = request.getParameter("resv_date");
         int room = Integer.parseInt(request.getParameter("room"));
-        String addr = request.getParameter("addr");
-        String tel = request.getParameter("tel");
-        String in_name = request.getParameter("in_name");
-        String comment = request.getParameter("comment");
+        int refund = Integer.parseInt(request.getParameter("refund"));
         JoaService js = JoaServiceImpl.getInstance();
-        JoaItem newResv = new JoaItem(loginID, name, resv_date, room, addr, tel, in_name, comment);
-        int result = js.addReservation(newResv);
+        JoaItem resv = js.getDaily(LocalDate.parse(resv_date), room);
+        int result = 0;
+        if (refund == 1) {
+          result = js.refundReservation(resv);
+        } else {
+          result = js.cancleReservation(resv);
+        }
+        session.setAttribute("refund", refund);
         if (result > 0) {
-            
         %>
         <form>
           <div class="form-group" align="center">
-            <h3 class="text-success">예약이 완료되었습니다.</h3>
+          <c:if test="${refund == 0 }">
+            <h3 class="text-success">예약이 취소되었습니다.</h3>
+          </c:if>
+          <c:if test="${refund == 1 }">
+            <h3 class="text-success">환불요청이 접수되었습니다.</h3>
+          </c:if>
             이용해주셔서 감사합니다:)
           </div>
           <div class="form-group">
             <label for="name">이름</label> <input type="text" name="name"
               id="name" class="form-control"
-              value="<%=newResv.getName() %>" readonly="readonly">
+              value="<%=resv.getName() %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="resv_date">예약일</label> <input type="text"
               name="resv_date" id="resv_date" class="form-control"
-              value="<%=newResv.getResv_date() %>" readonly="readonly">
+              value="<%=resv.getResv_date() %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="room">방</label> <input type="text" name="room"
               id="room" class="form-control"
-              value="<%=JoaItem.ROOMNAME[newResv.getRoom()] %>" readonly="readonly">
+              value="<%=JoaItem.ROOMNAME[resv.getRoom()] %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="addr">주소</label> <input type="text" name="addr"
               id="addr" class="form-control"
-              value="<%=newResv.getAddr() %>" readonly="readonly">
+              value="<%=resv.getAddr() %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="tel">연락처</label> <input type="tel" name="tel"
               id="tel" class="form-control"
-              value="<%=newResv.getTel() %>" readonly="readonly">
+              value="<%=resv.getTel() %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="in_name">입금자명</label> <input type="text"
               name="in_name" id="in_name" class="form-control"
-              value="<%=newResv.getIn_name() %>" readonly="readonly">
+              value="<%=resv.getIn_name() %>" readonly="readonly">
           </div>
           <div class="form-group">
             <label for="comment">남기실말</label> <input type="text"
               name="comment" id="comment" class="form-control"
-              value="<%=newResv.getComment() %>" readonly="readonly">
+              value="<%=resv.getComment() %>" readonly="readonly">
           </div>
         </form>
         <%

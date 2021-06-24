@@ -1,0 +1,14 @@
+@charset "UTF-8";
+body {
+  height: 100vh;
+  background-color: white;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.4)), url("img/background.jpg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+table, tr, th, td {
+  background-color: rgba(255, 255, 255, 0.5);
+}

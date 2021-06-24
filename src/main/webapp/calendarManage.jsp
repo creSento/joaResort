@@ -55,6 +55,15 @@
     <!-- 예약내용 -->
     <div class="row">
       <div class="col-md-12" style="padding: 2em;">
+        <table class="table table-bordered" style="text-align: center;">
+          <tr style="text-align: center;">
+            <td class="info">입금대기</td>
+            <td class="success">입금완료</td>
+            <td class="danger">환불요청</td>
+            <td class="warning">환불완료</td>
+            <td class="text-danger">예약취소</td>
+          </tr>
+        </table>
         <table class="table table-condensed table-hover table-bordered" style="text-align: center;">
           <thead>
             <tr>
@@ -78,26 +87,66 @@
                     session.setAttribute("daily", daily);
                     session.setAttribute("roomNumber", i);
                 %>
-                    <c:choose>
-                          <c:when test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing < 3}">
-                            <td>
-                              ${daily.name }
-                            </td>
-                            </c:when>
-                          <c:when test="${(cal.dateString[dow.index] eq daily.resv_date && daily.room == -1) || daily.processing >= 3}">
-                              <td class="info text-info">
-                              <c:if test="${empty login_ok || login_ok != 'login'}">
-                                  예약가능
-                              </c:if>
-                              <c:if test="${login_ok eq 'login'}">
-                                <a href="./revForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
-                                  예약가능
-                                </a>
-                              </c:if>
-                              </td>
-                          </c:when>
-                    </c:choose>
-                <% } %>
+                <td>
+                  <c:choose>
+                    <c:when
+                      test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing == 0}">
+                      <div class="bg-info">
+                      <a
+                        href="./revManageForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        ${daily.name } </a>
+                      </div>
+                    </c:when>
+                    <c:when
+                      test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing == 1}">
+                      <div class="bg-success">
+                      <a
+                        href="./revManageForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        ${daily.name } </a>
+                      </div>
+                    </c:when>
+                    <c:when
+                      test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing == 2}">
+                      <div class="bg-danger">
+                      <a
+                        href="./revManageForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        ${daily.name }
+                      </a>
+                      </div>
+                    </c:when>
+                    <c:when
+                      test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing == 3}">
+                      <div class="bg-warning">
+                      <a
+                        href="./revManageForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        ${daily.name }
+                      </a>
+                      </div>
+                    </c:when>
+                    <c:when
+                      test="${cal.dateString[dow.index] eq daily.resv_date && daily.room == roomNumber && daily.processing == 4}">
+                      <div class="text-danger">
+                        ${daily.name }
+                      </div>
+                      <div class="text-info">
+                      <a
+                        href="./revForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        예약가능 </a>
+                      </div>
+                    </c:when>
+                    <c:when
+                      test="${(cal.dateString[dow.index] eq daily.resv_date && daily.room == -1)}">
+                      <div class="text-info">
+                      <a
+                        href="./revForm.jsp?resv_date=${cal.dateString[dow.index] }&room=${roomNumber}">
+                        예약가능 </a>
+                      </div>
+                    </c:when>
+                  </c:choose>
+                </td>
+                <%
+                }
+                %>
               </tr>
             </c:forEach>
           </tbody>

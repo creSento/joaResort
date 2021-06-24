@@ -16,23 +16,12 @@ public class JoaCalendar implements Serializable {
     private List<JoaItem> monthly;
 
     public JoaCalendar() {
-
     }
 
-    public JoaCalendar(int year, int month) {
+    public JoaCalendar(int year, int month, int endOfMonth, String[] dayOfweek, String[] dateString,
+            boolean[][] isBooked, List<JoaItem> monthly) {
         this.year = year;
         this.month = month;
-    }
-
-    public JoaCalendar(int endOfMonth, String[] dayOfweek, String[] dateString, List<JoaItem> monthly) {
-        this.endOfMonth = endOfMonth;
-        this.dayOfweek = dayOfweek;
-        this.dateString = dateString;
-        this.monthly = monthly;
-    }
-
-    public JoaCalendar(int endOfMonth, String[] dayOfweek, String[] dateString, boolean[][] isBooked,
-            List<JoaItem> monthly) {
         this.endOfMonth = endOfMonth;
         this.dayOfweek = dayOfweek;
         this.dateString = dateString;

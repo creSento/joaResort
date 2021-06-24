@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="./style.css">
 <script
   src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script
@@ -14,10 +15,12 @@
 </head>
 <body>
   <%@ include file="./menu.jsp"%>
-  <div class="container-fluid">
+  <div class="container-fluid" style="display: flex; justify-content: center; align-items: center;">
     <div class="row">
-      <div class="col-md-9">
-        <h1>Welcome to Joa Resort</h1>
+      <div class="Jumbotron" style="padding: 5em;">
+        <div class="page-header">
+          <h1>Welcome to Joa Resort</h1>
+        </div>
       </div>
     </div>
   </div>

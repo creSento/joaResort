@@ -24,6 +24,7 @@
     <div class="row">
       <div class="col-md-9">
         <%
+        request.setCharacterEncoding("utf-8");
         String name = request.getParameter("name");
         String resv_date = request.getParameter("resv_date");
         int room = Integer.parseInt(request.getParameter("room"));
@@ -31,16 +32,17 @@
         String tel = request.getParameter("tel");
         String in_name = request.getParameter("in_name");
         String comment = request.getParameter("comment");
+        String processing = request.getParameter("processing");
         JoaService js = JoaServiceImpl.getInstance();
-        JoaItem newResv = new JoaItem(loginID, name, resv_date, room, addr, tel, in_name, comment);
-        int result = js.addReservation(newResv);
+        JoaItem newResv = 
+                new JoaItem(name, resv_date, room, addr, tel, in_name, comment, Integer.parseInt(processing));
+        int result = js.updateReservation(newResv);
         if (result > 0) {
             
         %>
         <form>
           <div class="form-group" align="center">
-            <h3 class="text-success">예약이 완료되었습니다.</h3>
-            이용해주셔서 감사합니다:)
+            <h3 class="text-success">수정 완료</h3>
           </div>
           <div class="form-group">
             <label for="name">이름</label> <input type="text" name="name"
@@ -76,6 +78,11 @@
             <label for="comment">남기실말</label> <input type="text"
               name="comment" id="comment" class="form-control"
               value="<%=newResv.getComment() %>" readonly="readonly">
+          </div>
+          <div class="form-group">
+            <label for="proccesing">상태</label> <input type="text"
+              name="proccesing" id="proccesing" class="form-control"
+              value="<%=JoaItem.PROCESS[newResv.getProcessing()] %>" readonly="readonly">
           </div>
         </form>
         <%

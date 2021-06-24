@@ -1,5 +1,6 @@
 # joaResort
 =================================================
+
 IDE : sts4
 WITH : java, jsp, javascript, jstl, mysql
 
